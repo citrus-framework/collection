@@ -1,0 +1,25 @@
+{
+    "name": "take64/citrus-collection",
+    "description": "php collection library",
+    "keywords": ["citrus", "php", "library", "collection"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "take64",
+            "email": "take64@citrus.tk"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^8.4",
+        "nunomaduro/phpinsights": "^v1.13",
+        "phan/phan": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Citrus\\": "src/",
+            "Test\\": "tests/"
+        }
+    }
+}

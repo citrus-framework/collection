@@ -1,5 +1,5 @@
 {
-    "name": "take64/citrus-collection",
+    "name": "citrus/collection",
     "description": "php collection library",
     "keywords": ["citrus", "php", "library", "collection"],
     "type": "library",

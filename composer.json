@@ -1,5 +1,5 @@
 {
-    "name": "citrus/collection",
+    "name": "citrus-framework/collection",
     "description": "php collection library",
     "keywords": ["citrus", "php", "library", "collection"],
     "type": "library",

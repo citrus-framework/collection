@@ -191,6 +191,33 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function keyMap_データ編集して配列生成()
+    {
+        $values = [
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => 4,
+        ];
+
+        // 全部1を足す
+        $expected = [
+            'a' => (1 + 1),
+            'b' => (2 + 1),
+            'c' => (3 + 1),
+            'd' => (4 + 1),
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->keyMap(function ($vl) {
+            return ($vl + 1);
+        })->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function range_指定範囲で配列生成()
     {
         $start = 5;

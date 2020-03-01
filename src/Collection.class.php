@@ -73,6 +73,21 @@ class Collection
 
 
 
+    /**
+     * callable関数を適用した内容を積んで返却する
+     * keyを維持する
+     *
+     * @param callable $callable
+     * @return self
+     */
+    public function keyMap(callable $callable): self
+    {
+        $this->source = Scanner::keyMap($this->source, $callable);
+        return $this;
+    }
+
+
+
     /**************************************************************************
      * Filter
      **************************************************************************/

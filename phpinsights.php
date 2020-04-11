@@ -29,6 +29,11 @@ return [
         PhpCsFixer\Fixer\Phpdoc\AlignMultilineCommentFixer::class,
         PHP_CodeSniffer\Standards\PSR2\Sniffs\ControlStructures\ElseIfDeclarationSniff::class,
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff::class,
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
+        SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff::class,
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses::class,
+        SlevomatCodingStandard\Sniffs\Commenting\UselessInheritDocCommentSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\DisallowMixedTypeHintSniff::class,
     ],
     'config' => [
         //  ExampleInsight::class => [
@@ -57,6 +62,14 @@ return [
         ],
         PhpCsFixer\Fixer\Whitespace\NoExtraBlankLinesFixer::class => [
             'tokens' => [], // possibles values ['break', 'case', 'continue', 'curly_brace_block', 'default', 'extra', 'parenthesis_brace_block', 'return', 'square_brace_block', 'switch', 'throw', 'use', 'use_trait']
+        ],
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff::class => [
+            'lineLimit' => 120,
+            'absoluteLineLimit' => 120,
+            'ignoreComments' => true,
+        ],
+        \ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff::class => [
+            'maxLength' => 32,
         ]
     ],
 ];

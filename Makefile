@@ -12,6 +12,7 @@ test_all:
 .PHONY: composer_reload
 composer_reload:
 	@composer clear-cache
+	@composer update -vvv
 	@composer dump-autoload
 
 .PHONY: composer_develop
@@ -26,11 +27,6 @@ composer_public:
 composer_check:
 	$(call highlight,#### ---- composer diag ---- ####)
 	@composer diag
-
-.PHONY: phan
-phan:
-	@mkdir -p ./phan/${DATE}
-	@./vendor/bin/phan --no-progress-bar --output ./.phan/${DATE}/${DATETIME}.txt
 
 .PHONY: insights
 insights:

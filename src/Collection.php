@@ -45,7 +45,7 @@ class Collection
      * callable関数がnull以外の値を返した場合、値を積んで返却する
      *
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public function append(callable $callable): self
     {
@@ -63,7 +63,7 @@ class Collection
      * callable関数を適用した内容を積んで返却する
      *
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public function map(callable $callable): self
     {
@@ -78,7 +78,7 @@ class Collection
      * keyを維持する
      *
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public function keyMap(callable $callable): self
     {
@@ -96,7 +96,7 @@ class Collection
      * callable関数の返却値がtrueの場合に積んで返却する
      *
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public function filter(callable $callable): self
     {
@@ -110,13 +110,27 @@ class Collection
      * callable関数がの返却値がtrueの場合に削除して返却する
      *
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public function remove(callable $callable): self
     {
         // false の場合に残せば良いので filter の逆
         return $this->filter(function ($vl, $ky) use ($callable) {
             return (false === $callable($vl, $ky));
+        });
+    }
+
+
+
+    /**
+     * 値がnullではないものを返却する
+     *
+     * @return $this
+     */
+    public function notNull(): self
+    {
+        return $this->filter(function ($vl) {
+            return (false === is_null($vl));
         });
     }
 
@@ -130,7 +144,7 @@ class Collection
      * 配列設定して、コレクションを生成
      *
      * @param array $source
-     * @return self
+     * @return $this
      */
     public static function stream(array $source): self
     {
@@ -145,7 +159,7 @@ class Collection
      * @param int      $start    開始
      * @param int      $end      終了
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public static function range(int $start, int $end, callable $callable): self
     {
@@ -159,7 +173,7 @@ class Collection
      *
      * @param int      $count    回数
      * @param callable $callable
-     * @return self
+     * @return $this
      */
     public static function repeat(int $count, callable $callable): self
     {
@@ -175,7 +189,7 @@ class Collection
      * 同じ要素がある場合はあとが優先
      *
      * @param array $values
-     * @return self
+     * @return $this
      */
     public function betterMerge(array $values): self
     {

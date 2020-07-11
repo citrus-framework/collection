@@ -122,6 +122,20 @@ class Collection
 
 
 
+    /**
+     * 値がnullではないものを返却する
+     *
+     * @return $this
+     */
+    public function notNull(): self
+    {
+        return $this->filter(function ($vl) {
+            return (false === is_null($vl));
+        });
+    }
+
+
+
     /**************************************************************************
      * Generator
      **************************************************************************/

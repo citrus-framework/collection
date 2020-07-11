@@ -134,6 +134,29 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function notNull_nullデータを削除した配列生成()
+    {
+        $values = [
+            'a' => 1,
+            'b' => null,
+            'c' => 3,
+            'd' => null,
+        ];
+
+        // キー「a」「c」以外を削除
+        $expected1 = [
+            'a' => 1,
+            'c' => 3,
+        ];
+        // 検算
+        $this->assertSame($expected1, Collection::stream($values)->notNull()->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function append_データ生成できたものだけで配列生成()
     {
         $values = [

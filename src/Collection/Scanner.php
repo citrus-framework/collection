@@ -36,6 +36,26 @@ class Scanner
 
     /**
      * callable関数を適用した内容を積んで返却する
+     * keyを指定する
+     *
+     * @param iterable $source
+     * @param callable $callable function($key, $value)
+     * @return iterable
+     */
+    public static function mapWithKey(iterable $source, callable $callable): iterable
+    {
+        $results = [];
+        foreach ($source as $ky => $vl)
+        {
+            $results += $callable($vl, $ky);
+        }
+        return $results;
+    }
+
+
+
+    /**
+     * callable関数を適用した内容を積んで返却する
      * keyを維持する
      *
      * @param iterable $source

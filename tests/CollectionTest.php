@@ -214,6 +214,33 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function mapWithKey_データ編集して配列生成()
+    {
+        $values = [
+            1,
+            2,
+            3,
+            4,
+        ];
+
+        // キーに全部1を足す
+        $expected = [
+            (1 + 1) => 1,
+            (2 + 1) => 2,
+            (3 + 1) => 3,
+            (4 + 1) => 4,
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->mapWithKey(function ($vl) {
+            return [($vl + 1) => $vl];
+        })->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function keyMap_データ編集して配列生成()
     {
         $values = [

@@ -75,6 +75,21 @@ class Collection
 
     /**
      * callable関数を適用した内容を積んで返却する
+     * keyを指定する
+     *
+     * @param callable $callable
+     * @return $this
+     */
+    public function mapWithKey(callable $callable): self
+    {
+        $this->source = Scanner::mapWithKey($this->source, $callable);
+        return $this;
+    }
+
+
+
+    /**
+     * callable関数を適用した内容を積んで返却する
      * keyを維持する
      *
      * @param callable $callable

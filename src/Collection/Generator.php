@@ -20,10 +20,10 @@ class Generator
     /**
      * 配列設定して、コレクションを生成
      *
-     * @param array $source
+     * @param iterable $source
      * @return Collection
      */
-    public static function stream(array $source): Collection
+    public static function stream(iterable $source): Collection
     {
         return new Collection($source);
     }
@@ -55,11 +55,11 @@ class Generator
      *
      * 同じ要素がある場合はあとが優先
      *
-     * @param array $array1
-     * @param array $array2
-     * @return array
+     * @param iterable $array1
+     * @param iterable $array2
+     * @return iterable
      */
-    public static function betterMergeRecursive(array $array1, array $array2): array
+    public static function betterMergeRecursive(iterable $array1, iterable $array2): iterable
     {
         foreach ($array2 as $ky => $vl)
         {

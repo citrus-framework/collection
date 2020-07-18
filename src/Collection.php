@@ -28,9 +28,9 @@ class Collection
     /**
      * constructor.
      *
-     * @param array $source
+     * @param iterable $source
      */
-    public function __construct(array $source)
+    public function __construct(iterable $source)
     {
         $this->source = $source;
     }
@@ -143,10 +143,10 @@ class Collection
     /**
      * 配列設定して、コレクションを生成
      *
-     * @param array $source
+     * @param iterable $source
      * @return $this
      */
-    public static function stream(array $source): self
+    public static function stream(iterable $source): self
     {
         return Generator::stream($source);
     }
@@ -188,10 +188,10 @@ class Collection
      *
      * 同じ要素がある場合はあとが優先
      *
-     * @param array $values
+     * @param iterable $values
      * @return $this
      */
-    public function betterMerge(array $values): self
+    public function betterMerge(iterable $values): self
     {
         $this->source = Generator::betterMergeRecursive($this->source, $values);
         return $this;
@@ -206,9 +206,9 @@ class Collection
     /**
      * 出力
      *
-     * @return array
+     * @return iterable
      */
-    public function toList(): array
+    public function toList(): iterable
     {
         return $this->source;
     }
@@ -218,9 +218,9 @@ class Collection
     /**
      * 出力(値だけ)
      *
-     * @return array
+     * @return iterable
      */
-    public function toValues(): array
+    public function toValues(): iterable
     {
         return array_values($this->source);
     }
@@ -230,9 +230,9 @@ class Collection
     /**
      * 出力(キーだけ)
      *
-     * @return array
+     * @return iterable
      */
-    public function toKeys(): array
+    public function toKeys(): iterable
     {
         return array_keys($this->source);
     }

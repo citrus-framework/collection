@@ -34,4 +34,31 @@ class Filter
         }
         return $results;
     }
+
+
+
+    /**
+     * 指定プロパティと引数値が一致した場合に積む
+     *
+     * @param iterable            $source   ソース
+     * @param string              $property プロパティ名称
+     * @param string|int|callable $expr     値かcallableで遅延実行
+     * @return iterable
+     */
+    public static function where(iterable $source, string $property, $expr): iterable
+    {
+        $results = [];
+        foreach ($source as $ky => $vl)
+        {
+            // 配列とオブジェクトの場合を振り分けて値を取得
+            $value = (true === is_array($vl) ? $vl[$property] : $vl->$property);
+            // 一致したら積む
+            $expr_value = (true === is_callable($expr) ? $expr() : $expr);
+            if ($value === $expr_value)
+            {
+                $results[$ky] = $vl;
+            }
+        }
+        return $results;
+    }
 }

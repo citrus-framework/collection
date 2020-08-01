@@ -157,6 +157,29 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function where_指定した値が一致した場合取得()
+    {
+        $values = [
+            ['name' => 'a', 'age' => 12],
+            ['name' => 'b', 'age' => 13],
+            ['name' => 'c', 'age' => 12],
+            ['name' => 'd', 'age' => 15],
+        ];
+
+        // キー「a」「c」以外を削除
+        $expected1 = [
+            ['name' => 'a', 'age' => 12],
+            ['name' => 'c', 'age' => 12],
+        ];
+        // 検算
+        $this->assertSame($expected1, Collection::stream($values)->where('age', 12)->toValues());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function append_データ生成できたものだけで配列生成()
     {
         $values = [

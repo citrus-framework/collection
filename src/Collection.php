@@ -151,6 +151,21 @@ class Collection
 
 
 
+    /**
+     * 値がnullではないものを返却する
+     *
+     * @param string              $property キー名称
+     * @param string|int|callable $expr     値かcallableで遅延実行
+     * @return $this
+     */
+    public function where(string $property, $expr): self
+    {
+        $this->source = Filter::where($this->source, $property, $expr);
+        return $this;
+    }
+
+
+
     /**************************************************************************
      * Generator
      **************************************************************************/

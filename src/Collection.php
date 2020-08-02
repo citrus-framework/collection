@@ -14,6 +14,7 @@ use Citrus\Collection\Filter;
 use Citrus\Collection\Generator;
 use Citrus\Collection\Register;
 use Citrus\Collection\Scanner;
+use Citrus\Collection\Sorter;
 
 /**
  * コレクションクラス
@@ -224,6 +225,47 @@ class Collection
     public function betterMerge(iterable $values): self
     {
         $this->source = Generator::betterMergeRecursive($this->source, $values);
+        return $this;
+    }
+
+
+
+    /**************************************************************************
+     * Sorter
+     **************************************************************************/
+
+    /**
+     * callable関数を利用してソートする
+     *
+     * callable関数は -1 or 0 or 1 を返却する
+     *
+     * @param callable $callable
+     * @return $this
+     */
+    public function sortBy(callable $callable): self
+    {
+        $this->source = Sorter::sortBy($this->source, $callable);
+        return $this;
+    }
+
+
+
+    /**
+     * プロパティを指定してソートする
+     *
+     * @param string $property
+     * @param bool   $ascending true:昇順,false:降順
+     * @return $this
+     */
+    public function sortByProp(string $property, bool $ascending = true): self
+    {
+        $this->source = Sorter::sortBy($this->source, function ($data1, $data2) use ($property, $ascending) {
+            // 配列かオブジェクトで取得方法を変える
+            $value1 = (true === is_array($data1) ? $data1[$property] : $data1->$property);
+            $value2 = (true === is_array($data2) ? $data2[$property] : $data2->$property);
+            // 降順の場合は-1を掛ける
+            return ($value1 <=> $value2) * (true === $ascending ? 1 : -1);
+        });
         return $this;
     }
 

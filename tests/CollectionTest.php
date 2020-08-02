@@ -333,4 +333,56 @@ class CollectionTest extends TestCase
             return $index;
         })->toList());
     }
+
+
+
+    /**
+     * @test
+     */
+    public function sortBy_ソートした配列を生成して返却()
+    {
+        $values = [
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'b', 'age' => 11],
+            ['name' => 'c', 'age' => 13],
+            ['name' => 'd', 'age' => 19],
+        ];
+
+        // 降順にソート
+        $expected = [
+            ['name' => 'd', 'age' => 19],
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'c', 'age' => 13],
+            ['name' => 'b', 'age' => 11],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->sortBy(function ($value1, $value2) {
+            return ($value1['age'] <=> $value2['age']) * -1;
+        })->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
+    public function sortByProp_ソートした配列を生成して返却()
+    {
+        $values = [
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'b', 'age' => 11],
+            ['name' => 'c', 'age' => 13],
+            ['name' => 'd', 'age' => 19],
+        ];
+
+        // 降順にソート
+        $expected = [
+            ['name' => 'd', 'age' => 19],
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'c', 'age' => 13],
+            ['name' => 'b', 'age' => 11],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->sortByProp('age', false)->toList());
+    }
 }

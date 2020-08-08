@@ -385,4 +385,24 @@ class CollectionTest extends TestCase
         // 検算
         $this->assertSame($expected, Collection::stream($values)->sortByProp('age', false)->toList());
     }
+
+
+
+    /**
+     * @test
+     */
+    public function one_一件だけ取得()
+    {
+        $values = [
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'b', 'age' => 11],
+            ['name' => 'c', 'age' => 13],
+            ['name' => 'd', 'age' => 19],
+        ];
+
+        // 降順にソート
+        $expected = ['name' => 'a', 'age' => 16];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->one());
+    }
 }

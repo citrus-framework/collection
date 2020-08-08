@@ -308,4 +308,20 @@ class Collection
     {
         return array_keys($this->source);
     }
+
+
+
+    /**
+     * 一件取得
+     *
+     * @return mixed|null
+     */
+    public function one()
+    {
+        foreach ($this->source as $one)
+        {
+            return $one;
+        }
+        return null;
+    }
 }

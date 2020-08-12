@@ -271,6 +271,37 @@ class Collection
 
 
 
+    /**
+     * プロパティを複数指定してソートする
+     *
+     * @param array $properties [[property => ascending], [property => ascending], ...]
+     * @return $this
+     */
+    public function sortByProps(array $properties): self
+    {
+        $this->source = Sorter::sortBy($this->source, function ($data1, $data2) use ($properties) {
+            // 配列かオブジェクトで取得方法を変える
+            foreach ($properties as $property => $ascending)
+            {
+                $value1 = (true === is_array($data1) ? $data1[$property] : $data1->$property);
+                $value2 = (true === is_array($data2) ? $data2[$property] : $data2->$property);
+                // 比較
+                $compare = ($value1 <=> $value2);
+                // 比較して 0の場合はもう一周する
+                if (0 === $compare)
+                {
+                    continue;
+                }
+                // 降順の場合は-1を掛ける
+                return $compare * (true === $ascending ? 1 : -1);
+            }
+            return 0;
+        });
+        return $this;
+    }
+
+
+
     /**************************************************************************
      * Exporter
      **************************************************************************/

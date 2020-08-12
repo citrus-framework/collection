@@ -391,6 +391,34 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function sortByProps_ソートした配列を生成して返却()
+    {
+        $values = [
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'b', 'age' => 11],
+            ['name' => 'c', 'age' => 13],
+            ['name' => 'a', 'age' => 19],
+        ];
+
+        // 降順にソート
+        $expected = [
+            ['name' => 'a', 'age' => 19],
+            ['name' => 'a', 'age' => 16],
+            ['name' => 'b', 'age' => 11],
+            ['name' => 'c', 'age' => 13],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->sortByProps([
+            'name' => true,
+            'age' => false,
+        ])->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function one_一件だけ取得()
     {
         $values = [

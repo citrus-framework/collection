@@ -237,6 +237,31 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function mapExecMethod_メソッド実行して配列生成()
+    {
+        $values = [
+            new CollectionObj(),
+            new CollectionObj(),
+            new CollectionObj(),
+            new CollectionObj(),
+        ];
+
+        // 全部1を足す
+        $expected = [
+            (new CollectionObj())->add(),
+            (new CollectionObj())->add(),
+            (new CollectionObj())->add(),
+            (new CollectionObj())->add(),
+        ];
+        // 検算
+        $this->assertEquals($expected, Collection::stream($values)->mapExecMethod('add')->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function mapWithKey_データ編集して配列生成()
     {
         $values = [
@@ -432,5 +457,15 @@ class CollectionTest extends TestCase
         $expected = ['name' => 'a', 'age' => 16];
         // 検算
         $this->assertSame($expected, Collection::stream($values)->one());
+    }
+}
+
+class CollectionObj
+{
+    public $count = 0;
+    public function add()
+    {
+        $this->count++;
+        return $this;
     }
 }

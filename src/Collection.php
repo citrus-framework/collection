@@ -75,6 +75,27 @@ class Collection
 
 
     /**
+     * 指定メソッドを実行した適用した内容を積んで返却する
+     *
+     * @param string $method_name
+     * @return $this
+     */
+    public function mapExecMethod(string $method_name): self
+    {
+        $this->source = Scanner::map($this->source, function ($vl) use ($method_name) {
+            // メソッドが存在する場合に実行する
+            if (true === method_exists($vl, $method_name))
+            {
+                $vl->$method_name();
+            }
+            return $vl;
+        });
+        return $this;
+    }
+
+
+
+    /**
      * callable関数を適用した内容を積んで返却する
      * keyを指定する
      *

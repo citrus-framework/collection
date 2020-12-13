@@ -366,6 +366,90 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function flatten_多次元配列を一次元に変換して配列生成()
+    {
+        $values = [
+            [
+                'a' => 1,
+                'b' => 2,
+            ],
+            [
+                'c' => 3,
+                'd' => 4,
+            ],
+            [
+                'e' => 5,
+            ],
+        ];
+        $expected = [
+                1,
+                2,
+                3,
+                4,
+                5,
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->flatten()->toList());
+
+        // キーを維持
+        $expected = [
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => 4,
+            'e' => 5,
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->flatten(1, true)->toList());
+
+        // 二次元以上
+        $values = [
+            [
+                'a' => 1,
+                'b' => [
+                    'bb' => 1,
+                    'bc' => 2,
+                    'bd' => [
+                        'bd1' => 1,
+                        'bd2' => 2,
+                    ],
+                ],
+            ],
+            [
+                'c' => [
+                    'bb' => 4,
+                    'bc' => 5,
+                    'cb' => 6,
+                ],
+                'd' => 4,
+            ],
+            [
+                'e' => 5,
+            ],
+        ];
+
+        // キーを維持
+        $expected = [
+            'a' => 1,
+            'bb' => 4,
+            'bc' => 5,
+            'bd' => [
+                'bd1' => 1,
+                'bd2' => 2,
+            ],
+            'cb' => 6,
+            'd' => 4,
+            'e' => 5,
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->flatten(1, true)->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function range_指定範囲で配列生成()
     {
         $start = 5;

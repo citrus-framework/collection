@@ -316,6 +316,56 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function chunk_データを分割して配列生成()
+    {
+        $values = [
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => 4,
+            'e' => 5,
+        ];
+
+        // 2つずつ分割
+        $expected = [
+            [
+                1,
+                2,
+            ],
+            [
+                3,
+                4,
+            ],
+            [
+                5,
+            ],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->chunk(2)->toList());
+
+        // 2つずつ分割(キーを維持)
+        $expected = [
+            [
+                'a' => 1,
+                'b' => 2,
+            ],
+            [
+                'c' => 3,
+                'd' => 4,
+            ],
+            [
+                'e' => 5,
+            ],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::stream($values)->chunk(2, true)->toList());
+    }
+
+
+
+    /**
+     * @test
+     */
     public function range_指定範囲で配列生成()
     {
         $start = 5;

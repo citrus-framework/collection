@@ -125,6 +125,21 @@ class Collection
 
 
 
+    /**
+     * コレクションにchunkを適用する
+     *
+     * @param int  $chunk         いくつずつに分割するか
+     * @param bool $preserve_keys true:キーを維持する
+     * @return $this
+     */
+    public function chunk(int $chunk, bool $preserve_keys = false): self
+    {
+        $this->source = array_chunk($this->source, $chunk, $preserve_keys);
+        return $this;
+    }
+
+
+
     /**************************************************************************
      * Filter
      **************************************************************************/

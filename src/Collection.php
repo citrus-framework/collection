@@ -140,6 +140,21 @@ class Collection
 
 
 
+    /**
+     * 多次元コレクションを一次元にする
+     *
+     * @param int|null $depth         再起回数の指定
+     * @param bool     $preserve_keys true:キーを維持する、キーが重複する場合は後勝ちする
+     * @return $this
+     */
+    public function flatten(int $depth = 1, bool $preserve_keys = false): self
+    {
+        $this->source = Scanner::flatten($this->source, $depth, $preserve_keys);
+        return $this;
+    }
+
+
+
     /**************************************************************************
      * Filter
      **************************************************************************/

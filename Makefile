@@ -11,17 +11,19 @@ test_all:
 
 .PHONY: composer_reload
 composer_reload:
-	@composer clear-cache
-	@composer update -vv
-	@composer dump-autoload
+	@composer clear-cache --no-interaction
+	@composer update -vv --no-interaction
+	@composer dump-autoload --no-interaction
 
 .PHONY: composer_develop
 composer_develop:
-	@composer install -vv --dev --prefer-dist --optimize-autoloader
+	@composer clear-cache --no-interaction
+	@composer install -vv --no-interaction --dev --prefer-dist --optimize-autoloader
 
 .PHONY: composer_public
 composer_public:
-	@composer install -vv --no-dev --prefer-dist --optimize-autoloader
+	@composer clear-cache --no-interaction
+	@composer install -vv --no-interaction --no-dev --prefer-dist --optimize-autoloader
 
 .PHONY: composer_check
 composer_check:

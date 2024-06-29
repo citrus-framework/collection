@@ -18,11 +18,11 @@ class Register
     /**
      * callable関数がnull以外の値を返した場合、値を積んで返却する
      *
-     * @param iterable $source
-     * @param callable $callable function($key, $value)
+     * @param array    $source
+     * @param callable $callable function($value, $key)
      * @return iterable
      */
-    public static function append(iterable $source, callable $callable): iterable
+    public static function append(array $source, callable $callable): array
     {
         $results = [];
         foreach ($source as $ky => $vl)

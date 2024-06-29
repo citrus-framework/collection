@@ -18,6 +18,14 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionTest extends TestCase
 {
+    /** @var array[] テスト配列 */
+    private array $values = [
+        ['name' => 'a', 'age' => 16],
+        ['name' => 'b', 'age' => 11],
+        ['name' => 'c', 'age' => 13],
+        ['name' => 'd', 'age' => 19],
+    ];
+
     /**
      * @test
      */
@@ -59,8 +67,6 @@ class CollectionTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-
-
     /**
      * @test
      */
@@ -95,8 +101,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -129,8 +133,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -152,8 +154,6 @@ class CollectionTest extends TestCase
         $this->assertSame($expected1, Collection::stream($values)->notNull()->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -174,8 +174,6 @@ class CollectionTest extends TestCase
         // 検算
         $this->assertSame($expected1, Collection::stream($values)->where('age', 12)->toValues());
     }
-
-
 
     /**
      * @test
@@ -205,8 +203,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -232,8 +228,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -256,8 +250,6 @@ class CollectionTest extends TestCase
         // 検算
         $this->assertEquals($expected, Collection::stream($values)->mapExecMethod('add')->toList());
     }
-
-
 
     /**
      * @test
@@ -284,8 +276,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -310,8 +300,6 @@ class CollectionTest extends TestCase
             return ($vl + 1);
         })->toList());
     }
-
-
 
     /**
      * @test
@@ -360,8 +348,6 @@ class CollectionTest extends TestCase
         // 検算
         $this->assertSame($expected, Collection::stream($values)->chunk(2, true)->toList());
     }
-
-
 
     /**
      * @test
@@ -445,8 +431,6 @@ class CollectionTest extends TestCase
         $this->assertSame($expected, Collection::stream($values)->flatten(1, true)->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -470,8 +454,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -492,8 +474,6 @@ class CollectionTest extends TestCase
             return $index;
         })->toList());
     }
-
-
 
     /**
      * @test
@@ -520,8 +500,6 @@ class CollectionTest extends TestCase
         })->toList());
     }
 
-
-
     /**
      * @test
      */
@@ -544,8 +522,6 @@ class CollectionTest extends TestCase
         // 検算
         $this->assertSame($expected, Collection::stream($values)->sortByProp('age', false)->toList());
     }
-
-
 
     /**
      * @test
@@ -573,24 +549,62 @@ class CollectionTest extends TestCase
         ])->toList());
     }
 
-
-
     /**
      * @test
      */
     public function one_一件だけ取得()
     {
-        $values = [
-            ['name' => 'a', 'age' => 16],
-            ['name' => 'b', 'age' => 11],
-            ['name' => 'c', 'age' => 13],
-            ['name' => 'd', 'age' => 19],
-        ];
-
         // 降順にソート
         $expected = ['name' => 'a', 'age' => 16];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->one());
+        $this->assertSame($expected, Collection::stream($this->values)->one());
+    }
+
+    /**
+     * @test
+     */
+    public function count_件数取得()
+    {
+        // 検算
+        $this->assertSame(4, Collection::stream($this->values)->count());
+        // 検算：フィルター
+        $this->assertSame(2, Collection::stream($this->values)->count(function ($value, $key) {
+            return $value['age'] > 15;
+        }));
+    }
+
+    /**
+     * @test
+     */
+    public function isEmpty_要素が空である()
+    {
+        // 検算
+        $this->assertSame(false, Collection::stream($this->values)->isEmpty());
+        $this->assertSame(true, Collection::stream([])->isEmpty());
+        // 検算：フィルター
+        $this->assertSame(false, Collection::stream($this->values)->isEmpty(function ($value, $key) {
+            return $value['age'] > 15;
+        }));
+        $this->assertSame(true, Collection::stream($this->values)->isEmpty(function ($value, $key) {
+            return $value['age'] > 19;
+        }));
+    }
+
+    /**
+     * @test
+     */
+    public function isNotEmpty_要素が空ではない()
+    {
+        // 検算
+        $this->assertSame(true, Collection::stream($this->values)->isNotEmpty());
+        $this->assertSame(false, Collection::stream([])->isNotEmpty());
+        // 検算：フィルター
+        $this->assertSame(true, Collection::stream($this->values)->isNotEmpty(function ($value, $key) {
+            return $value['age'] > 15;
+        }));
+        $this->assertSame(false, Collection::stream($this->values)->isNotEmpty(function ($value, $key) {
+            return $value['age'] > 19;
+        }));
     }
 }
 

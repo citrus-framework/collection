@@ -20,15 +20,13 @@ class Generator
     /**
      * 配列設定して、コレクションを生成
      *
-     * @param iterable $source
+     * @param array $source
      * @return Collection
      */
-    public static function stream(iterable $source): Collection
+    public static function stream(array $source): Collection
     {
         return new Collection($source);
     }
-
-
 
     /**
      * 指定した範囲でcallable関数を実行し、コレクションを生成
@@ -48,22 +46,20 @@ class Generator
         return new Collection($results);
     }
 
-
-
     /**
      * 両方の要素を残したいい感じの配列マージ
-     *
      * 同じ要素がある場合はあとが優先
      *
-     * @param iterable $array1
-     * @param iterable $array2
-     * @return iterable
+     * @param array $array1
+     * @param array $array2
+     * @return array
      */
-    public static function betterMergeRecursive(iterable $array1, iterable $array2): iterable
+    public static function betterMergeRecursive(array $array1, array $array2): array
     {
         foreach ($array2 as $ky => $vl)
         {
-            $array1[$ky] = (true === is_array($vl)
+            $array1[$ky] = (
+                true === is_array($vl)
                 ? self::betterMergeRecursive(($array1[$ky] ?? []), $array2[$ky]) // 配列の場合
                 : $array2[$ky]                                                   // 配列以外の場合
             );

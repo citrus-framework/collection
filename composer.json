@@ -12,9 +12,9 @@
     ],
     "require": {},
     "require-dev": {
-        "php": "^7.3",
-        "phpunit/phpunit": "^8.4",
-        "nunomaduro/phpinsights": "^v1.13"
+        "php": "^8.3",
+        "phpunit/phpunit": "^10.5",
+        "nunomaduro/phpinsights": "^v2.11"
     },
     "autoload": {
         "psr-4": {

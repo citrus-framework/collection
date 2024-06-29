@@ -20,14 +20,13 @@ class Sorter
      *
      * callable関数は -1 or 0 or 1 を返却する
      *
-     * @param iterable|array $source
-     * @param callable       $callable function($value1, $value2)
-     * @return iterable
+     * @param array    $source
+     * @param callable $callable function($value1, $value2)
+     * @return array
      */
-    public static function sortBy(iterable $source, callable $callable): iterable
+    public static function sortBy(array $source, callable $callable): array
     {
-        $results = (true === is_array($source) ? $source : iterator_to_array($source, true));
-        usort($results, $callable);
-        return $results;
+        usort($source, $callable);
+        return $source;
     }
 }

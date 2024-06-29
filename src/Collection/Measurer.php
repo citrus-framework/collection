@@ -22,7 +22,7 @@ class Measurer
      * @param callable|null $callable function($value, $key)
      * @return int
      */
-    public static function count(array $source, callable|null $callable): int
+    public static function count(array $source, callable|null $callable = null): int
     {
         if (!is_null($callable))
         {

@@ -18,12 +18,18 @@ class Filter
     /**
      * callable関数の返却値がtrueの場合に積んで返却する
      *
-     * @param array    $source
-     * @param callable $callable function($value, $key)
+     * @param array         $source
+     * @param callable|null $callable function($value, $key)
      * @return array
      */
-    public static function filter(array $source, callable $callable): array
+    public static function filter(array $source, callable|null $callable = null): array
     {
+        // 無ければそのまま返す
+        if (is_null($callable))
+        {
+            return $source;
+        }
+
         $results = [];
         foreach ($source as $ky => $vl)
         {

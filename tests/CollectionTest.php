@@ -552,17 +552,6 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
-    public function one_一件だけ取得()
-    {
-        // 降順にソート
-        $expected = ['name' => 'a', 'age' => 16];
-        // 検算
-        $this->assertSame($expected, Collection::stream($this->values)->one());
-    }
-
-    /**
-     * @test
-     */
     public function count_件数取得()
     {
         // 検算
@@ -604,6 +593,32 @@ class CollectionTest extends TestCase
         }));
         $this->assertSame(false, Collection::stream($this->values)->isNotEmpty(function ($value, $key) {
             return $value['age'] > 19;
+        }));
+    }
+
+    /**
+     * @test
+     */
+    public function first_先頭一件取得()
+    {
+        // 検算
+        $this->assertSame($this->values[0], Collection::stream($this->values)->first());
+        // 検算：フィルター
+        $this->assertSame($this->values[1], Collection::stream($this->values)->first(function ($value, $key) {
+            return $value['age'] === 11 or $value['age'] === 13;
+        }));
+    }
+
+    /**
+     * @test
+     */
+    public function last_最後一件取得()
+    {
+        // 検算
+        $this->assertSame($this->values[count($this->values) - 1], Collection::stream($this->values)->last());
+        // 検算：フィルター
+        $this->assertSame($this->values[2], Collection::stream($this->values)->last(function ($value, $key) {
+            return $value['age'] === 11 or $value['age'] === 13;
         }));
     }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus;
 
+use Citrus\Collection\Fetcher;
 use Citrus\Collection\Filter;
 use Citrus\Collection\Generator;
 use Citrus\Collection\JudgeMentor;
@@ -34,6 +35,32 @@ class Collection
     public function __construct(array $source)
     {
         $this->source = $source;
+    }
+
+    /**************************************************************************
+     * Fetcher
+     **************************************************************************/
+
+    /**
+     * 先頭の要素を取得
+     *
+     * @param callable|null $callable
+     * @return mixed
+     */
+    public function first(callable|null $callable = null): mixed
+    {
+        return Fetcher::first($this->source, $callable);
+    }
+
+    /**
+     * 最後の要素を取得
+     *
+     * @param callable|null $callable
+     * @return mixed
+     */
+    public function last(callable|null $callable = null): mixed
+    {
+        return Fetcher::last($this->source, $callable);
     }
 
     /**************************************************************************
@@ -388,19 +415,5 @@ class Collection
     public function toKeys(): array
     {
         return array_keys($this->source);
-    }
-
-    /**
-     * 一件取得
-     *
-     * @return mixed|null
-     */
-    public function one(): mixed
-    {
-        foreach ($this->source as $one)
-        {
-            return $one;
-        }
-        return null;
     }
 }

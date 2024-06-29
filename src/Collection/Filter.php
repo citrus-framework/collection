@@ -18,11 +18,11 @@ class Filter
     /**
      * callable関数の返却値がtrueの場合に積んで返却する
      *
-     * @param iterable $source
-     * @param callable $callable function($key, $value)
-     * @return iterable
+     * @param array    $source
+     * @param callable $callable function($value, $key)
+     * @return array
      */
-    public static function filter(iterable $source, callable $callable): iterable
+    public static function filter(array $source, callable $callable): array
     {
         $results = [];
         foreach ($source as $ky => $vl)
@@ -35,17 +35,15 @@ class Filter
         return $results;
     }
 
-
-
     /**
      * 指定プロパティと引数値が一致した場合に積む
      *
-     * @param iterable            $source   ソース
+     * @param array               $source   ソース
      * @param string              $property プロパティ名称
      * @param string|int|callable $expr     値かcallableで遅延実行
-     * @return iterable
+     * @return array
      */
-    public static function where(iterable $source, string $property, $expr): iterable
+    public static function where(array $source, string $property, string|int|callable $expr): array
     {
         $results = [];
         foreach ($source as $ky => $vl)

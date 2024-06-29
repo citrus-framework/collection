@@ -12,6 +12,8 @@ namespace Citrus;
 
 use Citrus\Collection\Filter;
 use Citrus\Collection\Generator;
+use Citrus\Collection\JudgeMentor;
+use Citrus\Collection\Measurer;
 use Citrus\Collection\Register;
 use Citrus\Collection\Scanner;
 use Citrus\Collection\Sorter;
@@ -21,22 +23,169 @@ use Citrus\Collection\Sorter;
  */
 class Collection
 {
-    /** @var iterable データソース */
-    protected $source;
-
-
+    /** @var array データソース */
+    protected array $source;
 
     /**
      * constructor.
      *
-     * @param iterable $source
+     * @param array $source
      */
-    public function __construct(iterable $source)
+    public function __construct(array $source)
     {
         $this->source = $source;
     }
 
+    /**************************************************************************
+     * Filter
+     **************************************************************************/
 
+    /**
+     * callable関数の返却値がtrueの場合に積んで返却する
+     *
+     * @param callable $callable
+     * @return $this
+     */
+    public function filter(callable $callable): self
+    {
+        $this->source = Filter::filter($this->source, $callable);
+        return $this;
+    }
+
+    /**
+     * callable関数がの返却値がtrueの場合に削除して返却する
+     *
+     * @param callable $callable
+     * @return $this
+     */
+    public function remove(callable $callable): self
+    {
+        // false の場合に残せば良いので filter の逆
+        return $this->filter(function ($vl, $ky) use ($callable) {
+            return (false === $callable($vl, $ky));
+        });
+    }
+
+    /**
+     * 値がnullではないものを返却する
+     *
+     * @return $this
+     */
+    public function notNull(): self
+    {
+        return $this->filter(function ($vl) {
+            return (false === is_null($vl));
+        });
+    }
+
+    /**
+     * 値がnullではないものを返却する
+     *
+     * @param string              $property キー名称
+     * @param string|int|callable $expr     値かcallableで遅延実行
+     * @return $this
+     */
+    public function where(string $property, string|int|callable $expr): self
+    {
+        $this->source = Filter::where($this->source, $property, $expr);
+        return $this;
+    }
+
+    /**************************************************************************
+     * Generator
+     **************************************************************************/
+
+    /**
+     * 配列設定して、コレクションを生成
+     *
+     * @param array $source
+     * @return $this
+     */
+    public static function stream(array $source): self
+    {
+        return Generator::stream($source);
+    }
+
+    /**
+     * 指定した範囲でcallable関数を実行し、コレクションを生成
+     *
+     * @param int      $start    開始
+     * @param int      $end      終了
+     * @param callable $callable
+     * @return $this
+     */
+    public static function range(int $start, int $end, callable $callable): self
+    {
+        return Generator::range($start, $end, $callable);
+    }
+
+    /**
+     * 指定した回数でcallable関数を実行し、コレクションを生成
+     *
+     * @param int      $count    回数
+     * @param callable $callable
+     * @return $this
+     */
+    public static function repeat(int $count, callable $callable): self
+    {
+        // 範囲は1から$count
+        return Generator::range(1, $count, $callable);
+    }
+
+    /**
+     * 両方の要素を残したいい感じの配列マージ
+     *
+     * 同じ要素がある場合はあとが優先
+     *
+     * @param array $values
+     * @return $this
+     */
+    public function betterMerge(array $values): self
+    {
+        $this->source = Generator::betterMergeRecursive($this->source, $values);
+        return $this;
+    }
+
+    /**************************************************************************
+     * JudgeMentor
+     **************************************************************************/
+
+    /**
+     * 要素が空である
+     *
+     * @param callable|null $callable function($value, $key)
+     * @return bool
+     */
+    public function isEmpty(callable|null $callable = null): bool
+    {
+        return JudgeMentor::isEmpty($this->source, $callable);
+    }
+
+    /**
+     * 要素が空ではない
+     *
+     * @param callable|null $callable function($value, $key)
+     * @return bool
+     */
+    public function isNotEmpty(callable|null $callable = null): bool
+    {
+        return JudgeMentor::isNotEmpty($this->source, $callable);
+    }
+
+    /**************************************************************************
+     * Measurer
+     **************************************************************************/
+
+    /**
+     * 総素数
+     *
+     * @param callable|null $callable function($value, $key)
+     * @return int
+     */
+    public function count(callable|null $callable = null): int
+    {
+        return Measurer::count($this->source, $callable);
+    }
 
     /**************************************************************************
      * Register
@@ -54,8 +203,6 @@ class Collection
         return $this;
     }
 
-
-
     /**************************************************************************
      * Scanner
      **************************************************************************/
@@ -71,8 +218,6 @@ class Collection
         $this->source = Scanner::map($this->source, $callable);
         return $this;
     }
-
-
 
     /**
      * 指定メソッドを実行した適用した内容を積んで返却する
@@ -93,8 +238,6 @@ class Collection
         return $this;
     }
 
-
-
     /**
      * callable関数を適用した内容を積んで返却する
      * keyを指定する
@@ -107,8 +250,6 @@ class Collection
         $this->source = Scanner::mapWithKey($this->source, $callable);
         return $this;
     }
-
-
 
     /**
      * callable関数を適用した内容を積んで返却する
@@ -123,8 +264,6 @@ class Collection
         return $this;
     }
 
-
-
     /**
      * コレクションにchunkを適用する
      *
@@ -138,148 +277,18 @@ class Collection
         return $this;
     }
 
-
-
     /**
      * 多次元コレクションを一次元にする
      *
-     * @param int|null $depth         再起回数の指定
-     * @param bool     $preserve_keys true:キーを維持する、キーが重複する場合は後勝ちする
+     * @param int|null  $depth         再起回数の指定
+     * @param bool|null $preserve_keys true:キーを維持する、キーが重複する場合は後勝ちする
      * @return $this
      */
-    public function flatten(int $depth = 1, bool $preserve_keys = false): self
+    public function flatten(int|null $depth = 1, bool|null $preserve_keys = false): Collection
     {
         $this->source = Scanner::flatten($this->source, $depth, $preserve_keys);
         return $this;
     }
-
-
-
-    /**************************************************************************
-     * Filter
-     **************************************************************************/
-
-    /**
-     * callable関数の返却値がtrueの場合に積んで返却する
-     *
-     * @param callable $callable
-     * @return $this
-     */
-    public function filter(callable $callable): self
-    {
-        $this->source = Filter::filter($this->source, $callable);
-        return $this;
-    }
-
-
-
-    /**
-     * callable関数がの返却値がtrueの場合に削除して返却する
-     *
-     * @param callable $callable
-     * @return $this
-     */
-    public function remove(callable $callable): self
-    {
-        // false の場合に残せば良いので filter の逆
-        return $this->filter(function ($vl, $ky) use ($callable) {
-            return (false === $callable($vl, $ky));
-        });
-    }
-
-
-
-    /**
-     * 値がnullではないものを返却する
-     *
-     * @return $this
-     */
-    public function notNull(): self
-    {
-        return $this->filter(function ($vl) {
-            return (false === is_null($vl));
-        });
-    }
-
-
-
-    /**
-     * 値がnullではないものを返却する
-     *
-     * @param string              $property キー名称
-     * @param string|int|callable $expr     値かcallableで遅延実行
-     * @return $this
-     */
-    public function where(string $property, $expr): self
-    {
-        $this->source = Filter::where($this->source, $property, $expr);
-        return $this;
-    }
-
-
-
-    /**************************************************************************
-     * Generator
-     **************************************************************************/
-
-    /**
-     * 配列設定して、コレクションを生成
-     *
-     * @param iterable $source
-     * @return $this
-     */
-    public static function stream(iterable $source): self
-    {
-        return Generator::stream($source);
-    }
-
-
-
-    /**
-     * 指定した範囲でcallable関数を実行し、コレクションを生成
-     *
-     * @param int      $start    開始
-     * @param int      $end      終了
-     * @param callable $callable
-     * @return $this
-     */
-    public static function range(int $start, int $end, callable $callable): self
-    {
-        return Generator::range($start, $end, $callable);
-    }
-
-
-
-    /**
-     * 指定した回数でcallable関数を実行し、コレクションを生成
-     *
-     * @param int      $count    回数
-     * @param callable $callable
-     * @return $this
-     */
-    public static function repeat(int $count, callable $callable): self
-    {
-        // 範囲は1から$count
-        return Generator::range(1, $count, $callable);
-    }
-
-
-
-    /**
-     * 両方の要素を残したいい感じの配列マージ
-     *
-     * 同じ要素がある場合はあとが優先
-     *
-     * @param iterable $values
-     * @return $this
-     */
-    public function betterMerge(iterable $values): self
-    {
-        $this->source = Generator::betterMergeRecursive($this->source, $values);
-        return $this;
-    }
-
-
 
     /**************************************************************************
      * Sorter
@@ -299,8 +308,6 @@ class Collection
         return $this;
     }
 
-
-
     /**
      * プロパティを指定してソートする
      *
@@ -319,8 +326,6 @@ class Collection
         });
         return $this;
     }
-
-
 
     /**
      * プロパティを複数指定してソートする
@@ -351,8 +356,6 @@ class Collection
         return $this;
     }
 
-
-
     /**************************************************************************
      * Exporter
      **************************************************************************/
@@ -360,45 +363,39 @@ class Collection
     /**
      * 出力
      *
-     * @return iterable
+     * @return array
      */
-    public function toList(): iterable
+    public function toList(): array
     {
         return $this->source;
     }
 
-
-
     /**
      * 出力(値だけ)
      *
-     * @return iterable
+     * @return array
      */
-    public function toValues(): iterable
+    public function toValues(): array
     {
         return array_values($this->source);
     }
 
-
-
     /**
      * 出力(キーだけ)
      *
-     * @return iterable
+     * @return array
      */
-    public function toKeys(): iterable
+    public function toKeys(): array
     {
         return array_keys($this->source);
     }
-
-
 
     /**
      * 一件取得
      *
      * @return mixed|null
      */
-    public function one()
+    public function one(): mixed
     {
         foreach ($this->source as $one)
         {

@@ -5,25 +5,23 @@ define highlight
 	@echo "\033[1;32m$1\033[0m"
 endef
 
-.PHONY: test_all
-test_all:
+.PHONY: test
+test:
 	@./vendor/bin/phpunit
 
 .PHONY: composer_reload
 composer_reload:
-	@composer clear-cache --no-interaction
-	@composer update -vv --no-interaction
-	@composer dump-autoload --no-interaction
+	@composer clear-cache
+	@composer update -vv
+	@composer dump-autoload
 
 .PHONY: composer_develop
 composer_develop:
-	@composer clear-cache --no-interaction
-	@composer install -vv --no-interaction --dev --prefer-dist --optimize-autoloader
+	@composer install -vv --dev --prefer-dist --optimize-autoloader
 
 .PHONY: composer_public
 composer_public:
-	@composer clear-cache --no-interaction
-	@composer install -vv --no-interaction --no-dev --prefer-dist --optimize-autoloader
+	@composer install -vv --no-dev --prefer-dist --optimize-autoloader
 
 .PHONY: composer_check
 composer_check:

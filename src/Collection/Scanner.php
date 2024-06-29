@@ -18,11 +18,11 @@ class Scanner
     /**
      * callable関数を適用した内容を積んで返却する
      *
-     * @param iterable $source
-     * @param callable $callable function($key, $value)
-     * @return iterable
+     * @param array    $source
+     * @param callable $callable function($value, $key)
+     * @return array
      */
-    public static function map(iterable $source, callable $callable): iterable
+    public static function map(array $source, callable $callable): array
     {
         $results = [];
         foreach ($source as $ky => $vl)
@@ -32,17 +32,15 @@ class Scanner
         return $results;
     }
 
-
-
     /**
      * callable関数を適用した内容を積んで返却する
      * keyを指定する
      *
-     * @param iterable $source
-     * @param callable $callable function($key, $value)
-     * @return iterable
+     * @param array    $source
+     * @param callable $callable function($value, $key)
+     * @return array
      */
-    public static function mapWithKey(iterable $source, callable $callable): iterable
+    public static function mapWithKey(array $source, callable $callable): array
     {
         $results = [];
         foreach ($source as $ky => $vl)
@@ -52,17 +50,15 @@ class Scanner
         return $results;
     }
 
-
-
     /**
      * callable関数を適用した内容を積んで返却する
      * keyを維持する
      *
-     * @param iterable $source
-     * @param callable $callable function($key, $value)
-     * @return iterable
+     * @param array    $source
+     * @param callable $callable function($value, $key)
+     * @return array
      */
-    public static function keyMap(iterable $source, callable $callable): iterable
+    public static function keyMap(array $source, callable $callable): array
     {
         $results = [];
         foreach ($source as $ky => $vl)
@@ -72,18 +68,15 @@ class Scanner
         return $results;
     }
 
-
-
     /**
      * 多次元コレクションを一次元にする
      *
-     *
-     * @param iterable $source
+     * @param array    $source
      * @param int|null $depth         再起回数の指定
      * @param bool     $preserve_keys true:キーを維持する、キーが重複する場合は後勝ちする
-     * @return iterable
+     * @return array
      */
-    public static function flatten(iterable $source, int $depth = null, bool $preserve_keys = false): iterable
+    public static function flatten(array $source, int $depth = null, bool $preserve_keys = false): array
     {
         $results = [];
         foreach ($source as $ky => $vl)

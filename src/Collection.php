@@ -134,6 +134,28 @@ class Collection
     }
 
     /**
+     * 配列設定して、コレクションを生成
+     *
+     * @param array $source
+     * @return Collection
+     */
+    public static function fromArray(array $source): Collection
+    {
+        return Generator::fromArray($source);
+    }
+
+    /**
+     * イテレーター設定して、コレクションを生成
+     *
+     * @param iterable $source
+     * @return Collection
+     */
+    public static function fromIterator(iterable $source): Collection
+    {
+        return Generator::fromIterator($source);
+    }
+
+    /**
      * 指定した範囲でcallable関数を実行し、コレクションを生成
      *
      * @param int      $start    開始

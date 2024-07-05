@@ -18,14 +18,37 @@ use Citrus\Collection;
 class Generator
 {
     /**
+     * イテレーター設定して、コレクションを生成
+     *
+     * @param iterable $source
+     * @return Collection
+     * @deprecated 後方互換のため
+     */
+    public static function stream(iterable $source): Collection
+    {
+        return self::fromArray(iterator_to_array($source));
+    }
+
+    /**
      * 配列設定して、コレクションを生成
      *
      * @param array $source
      * @return Collection
      */
-    public static function stream(array $source): Collection
+    public static function fromArray(array $source): Collection
     {
         return new Collection($source);
+    }
+
+    /**
+     * イテレーター設定して、コレクションを生成
+     *
+     * @param iterable $source
+     * @return Collection
+     */
+    public static function fromIterator(iterable $source): Collection
+    {
+        return self::fromArray(iterator_to_array($source));
     }
 
     /**

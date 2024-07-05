@@ -480,13 +480,6 @@ class CollectionTest extends TestCase
      */
     public function sortBy_ソートした配列を生成して返却()
     {
-        $values = [
-            ['name' => 'a', 'age' => 16],
-            ['name' => 'b', 'age' => 11],
-            ['name' => 'c', 'age' => 13],
-            ['name' => 'd', 'age' => 19],
-        ];
-
         // 降順にソート
         $expected = [
             ['name' => 'd', 'age' => 19],
@@ -495,7 +488,7 @@ class CollectionTest extends TestCase
             ['name' => 'b', 'age' => 11],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->sortBy(function ($value1, $value2) {
+        $this->assertSame($expected, Collection::stream($this->values)->sortBy(function ($value1, $value2) {
             return ($value1['age'] <=> $value2['age']) * -1;
         })->toList());
     }
@@ -505,13 +498,6 @@ class CollectionTest extends TestCase
      */
     public function sortByProp_ソートした配列を生成して返却()
     {
-        $values = [
-            ['name' => 'a', 'age' => 16],
-            ['name' => 'b', 'age' => 11],
-            ['name' => 'c', 'age' => 13],
-            ['name' => 'd', 'age' => 19],
-        ];
-
         // 降順にソート
         $expected = [
             ['name' => 'd', 'age' => 19],
@@ -520,7 +506,7 @@ class CollectionTest extends TestCase
             ['name' => 'b', 'age' => 11],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->sortByProp('age', false)->toList());
+        $this->assertSame($expected, Collection::stream($this->values)->sortByProp('age', false)->toList());
     }
 
     /**
@@ -620,6 +606,35 @@ class CollectionTest extends TestCase
         $this->assertSame($this->values[2], Collection::stream($this->values)->last(function ($value, $key) {
             return $value['age'] === 11 or $value['age'] === 13;
         }));
+    }
+
+    /**
+     * @test
+     */
+    public function fromArray_コレクション生成()
+    {
+        // 検算
+        $this->assertSame($this->values, Collection::fromArray($this->values)->toList());
+    }
+
+    /**
+     * @test
+     */
+    public function fromIterator_コレクション生成()
+    {
+        // 検算
+        $this->assertSame($this->values, Collection::fromIterator($this->toIterator())->toList());
+    }
+
+    /**
+     * イテレーターで返却
+     */
+    public function toIterator()
+    {
+        foreach ($this->values as $value)
+        {
+            yield $value;
+        }
     }
 }
 

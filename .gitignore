@@ -6,5 +6,6 @@
 composer.lock
 
 # phpunit
+.phpunit.cache/
 .phpunit.result.cache
 phpunit.tdx

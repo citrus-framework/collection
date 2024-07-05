@@ -27,7 +27,7 @@ class Fetcher
         $filtered = Filter::filter($source, $callable);
         $count = Measurer::count($filtered);
         // 無ければnull
-        if ($count === 0)
+        if (0 === $count)
         {
             return null;
         }
@@ -46,7 +46,7 @@ class Fetcher
         $filtered = Filter::filter($source, $callable);
         $count = Measurer::count($filtered);
         // 無ければnull
-        if ($count === 0)
+        if (0 === $count)
         {
             return null;
         }

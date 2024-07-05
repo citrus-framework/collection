@@ -24,7 +24,7 @@ class Measurer
      */
     public static function count(array $source, callable|null $callable = null): int
     {
-        if (!is_null($callable))
+        if (false === is_null($callable))
         {
             return count(Filter::filter($source, $callable));
         }

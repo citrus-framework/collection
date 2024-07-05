@@ -24,7 +24,7 @@ class JudgeMentor
      */
     public static function isEmpty(array $source, callable|null $callable): bool
     {
-        return Measurer::count($source, $callable) === 0;
+        return 0 === Measurer::count($source, $callable);
     }
 
     /**
@@ -36,6 +36,6 @@ class JudgeMentor
      */
     public static function isNotEmpty(array $source, callable|null $callable): bool
     {
-        return Measurer::count($source, $callable) !== 0;
+        return 0 !== Measurer::count($source, $callable);
     }
 }

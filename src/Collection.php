@@ -127,6 +127,7 @@ class Collection
      *
      * @param array $source
      * @return $this
+     * @deprecated 後方互換のため
      */
     public static function stream(array $source): self
     {

@@ -61,7 +61,7 @@ class CollectionTest extends TestCase
         ];
 
         // いい感じのマージ
-        $actual = Collection::stream($array1)->betterMerge($array2)->toList();
+        $actual = Collection::fromArray($array1)->betterMerge($array2)->toList();
 
         // 検算
         $this->assertSame($expected, $actual);
@@ -86,7 +86,7 @@ class CollectionTest extends TestCase
             'd' => 4,
         ];
         // 検算
-        $this->assertSame($expected1, Collection::stream($values)->filter(function ($vl, $ky) {
+        $this->assertSame($expected1, Collection::fromArray($values)->filter(function ($vl, $ky) {
             return ('c' !== $ky);
         })->toList());
 
@@ -96,7 +96,7 @@ class CollectionTest extends TestCase
             'd' => 4,
         ];
         // 検算
-        $this->assertSame($expected2, Collection::stream($values)->filter(function ($vl) {
+        $this->assertSame($expected2, Collection::fromArray($values)->filter(function ($vl) {
             return (2 < $vl);
         })->toList());
     }
@@ -118,7 +118,7 @@ class CollectionTest extends TestCase
             'c' => 3,
         ];
         // 検算
-        $this->assertSame($expected1, Collection::stream($values)->remove(function ($vl, $ky) {
+        $this->assertSame($expected1, Collection::fromArray($values)->remove(function ($vl, $ky) {
             return (3 !== $vl);
         })->toList());
 
@@ -128,7 +128,7 @@ class CollectionTest extends TestCase
             'b' => 2,
         ];
         // 検算
-        $this->assertSame($expected2, Collection::stream($values)->remove(function ($vl) {
+        $this->assertSame($expected2, Collection::fromArray($values)->remove(function ($vl) {
             return (2 < $vl);
         })->toList());
     }
@@ -151,7 +151,7 @@ class CollectionTest extends TestCase
             'c' => 3,
         ];
         // 検算
-        $this->assertSame($expected1, Collection::stream($values)->notNull()->toList());
+        $this->assertSame($expected1, Collection::fromArray($values)->notNull()->toList());
     }
 
     /**
@@ -172,7 +172,7 @@ class CollectionTest extends TestCase
             ['name' => 'c', 'age' => 12],
         ];
         // 検算
-        $this->assertSame($expected1, Collection::stream($values)->where('age', 12)->toValues());
+        $this->assertSame($expected1, Collection::fromArray($values)->where('age', 12)->toValues());
     }
 
     /**
@@ -194,7 +194,7 @@ class CollectionTest extends TestCase
             'd' => (4 + 1),
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->append(function ($vl, $ky) {
+        $this->assertSame($expected, Collection::fromArray($values)->append(function ($vl, $ky) {
             if ('c' !== $ky)
             {
                 return ($vl + 1);
@@ -223,7 +223,7 @@ class CollectionTest extends TestCase
             (4 + 1),
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->map(function ($vl) {
+        $this->assertSame($expected, Collection::fromArray($values)->map(function ($vl) {
             return ($vl + 1);
         })->toList());
     }
@@ -248,7 +248,7 @@ class CollectionTest extends TestCase
             (new CollectionObj())->add(),
         ];
         // 検算
-        $this->assertEquals($expected, Collection::stream($values)->mapExecMethod('add')->toList());
+        $this->assertEquals($expected, Collection::fromArray($values)->mapExecMethod('add')->toList());
     }
 
     /**
@@ -271,7 +271,7 @@ class CollectionTest extends TestCase
             (4 + 1) => 4,
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->mapWithKey(function ($vl) {
+        $this->assertSame($expected, Collection::fromArray($values)->mapWithKey(function ($vl) {
             return [($vl + 1) => $vl];
         })->toList());
     }
@@ -296,7 +296,7 @@ class CollectionTest extends TestCase
             'd' => (4 + 1),
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->keyMap(function ($vl) {
+        $this->assertSame($expected, Collection::fromArray($values)->keyMap(function ($vl) {
             return ($vl + 1);
         })->toList());
     }
@@ -329,7 +329,7 @@ class CollectionTest extends TestCase
             ],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->chunk(2)->toList());
+        $this->assertSame($expected, Collection::fromArray($values)->chunk(2)->toList());
 
         // 2つずつ分割(キーを維持)
         $expected = [
@@ -346,7 +346,7 @@ class CollectionTest extends TestCase
             ],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->chunk(2, true)->toList());
+        $this->assertSame($expected, Collection::fromArray($values)->chunk(2, true)->toList());
     }
 
     /**
@@ -375,7 +375,7 @@ class CollectionTest extends TestCase
                 5,
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->flatten()->toList());
+        $this->assertSame($expected, Collection::fromArray($values)->flatten()->toList());
 
         // キーを維持
         $expected = [
@@ -386,7 +386,7 @@ class CollectionTest extends TestCase
             'e' => 5,
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->flatten(1, true)->toList());
+        $this->assertSame($expected, Collection::fromArray($values)->flatten(1, true)->toList());
 
         // 二次元以上
         $values = [
@@ -428,7 +428,7 @@ class CollectionTest extends TestCase
             'e' => 5,
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->flatten(1, true)->toList());
+        $this->assertSame($expected, Collection::fromArray($values)->flatten(1, true)->toList());
     }
 
     /**
@@ -488,7 +488,7 @@ class CollectionTest extends TestCase
             ['name' => 'b', 'age' => 11],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($this->values)->sortBy(function ($value1, $value2) {
+        $this->assertSame($expected, Collection::fromArray($this->values)->sortBy(function ($value1, $value2) {
             return ($value1['age'] <=> $value2['age']) * -1;
         })->toList());
     }
@@ -506,7 +506,7 @@ class CollectionTest extends TestCase
             ['name' => 'b', 'age' => 11],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($this->values)->sortByProp('age', false)->toList());
+        $this->assertSame($expected, Collection::fromArray($this->values)->sortByProp('age', false)->toList());
     }
 
     /**
@@ -529,7 +529,7 @@ class CollectionTest extends TestCase
             ['name' => 'c', 'age' => 13],
         ];
         // 検算
-        $this->assertSame($expected, Collection::stream($values)->sortByProps([
+        $this->assertSame($expected, Collection::fromArray($values)->sortByProps([
             'name' => true,
             'age' => false,
         ])->toList());
@@ -541,9 +541,9 @@ class CollectionTest extends TestCase
     public function count_件数取得()
     {
         // 検算
-        $this->assertSame(4, Collection::stream($this->values)->count());
+        $this->assertSame(4, Collection::fromArray($this->values)->count());
         // 検算：フィルター
-        $this->assertSame(2, Collection::stream($this->values)->count(function ($value, $key) {
+        $this->assertSame(2, Collection::fromArray($this->values)->count(function ($value, $key) {
             return $value['age'] > 15;
         }));
     }
@@ -554,13 +554,13 @@ class CollectionTest extends TestCase
     public function isEmpty_要素が空である()
     {
         // 検算
-        $this->assertSame(false, Collection::stream($this->values)->isEmpty());
-        $this->assertSame(true, Collection::stream([])->isEmpty());
+        $this->assertSame(false, Collection::fromArray($this->values)->isEmpty());
+        $this->assertSame(true, Collection::fromArray([])->isEmpty());
         // 検算：フィルター
-        $this->assertSame(false, Collection::stream($this->values)->isEmpty(function ($value, $key) {
+        $this->assertSame(false, Collection::fromArray($this->values)->isEmpty(function ($value, $key) {
             return $value['age'] > 15;
         }));
-        $this->assertSame(true, Collection::stream($this->values)->isEmpty(function ($value, $key) {
+        $this->assertSame(true, Collection::fromArray($this->values)->isEmpty(function ($value, $key) {
             return $value['age'] > 19;
         }));
     }
@@ -571,13 +571,13 @@ class CollectionTest extends TestCase
     public function isNotEmpty_要素が空ではない()
     {
         // 検算
-        $this->assertSame(true, Collection::stream($this->values)->isNotEmpty());
-        $this->assertSame(false, Collection::stream([])->isNotEmpty());
+        $this->assertSame(true, Collection::fromArray($this->values)->isNotEmpty());
+        $this->assertSame(false, Collection::fromArray([])->isNotEmpty());
         // 検算：フィルター
-        $this->assertSame(true, Collection::stream($this->values)->isNotEmpty(function ($value, $key) {
+        $this->assertSame(true, Collection::fromArray($this->values)->isNotEmpty(function ($value, $key) {
             return $value['age'] > 15;
         }));
-        $this->assertSame(false, Collection::stream($this->values)->isNotEmpty(function ($value, $key) {
+        $this->assertSame(false, Collection::fromArray($this->values)->isNotEmpty(function ($value, $key) {
             return $value['age'] > 19;
         }));
     }
@@ -588,9 +588,9 @@ class CollectionTest extends TestCase
     public function first_先頭一件取得()
     {
         // 検算
-        $this->assertSame($this->values[0], Collection::stream($this->values)->first());
+        $this->assertSame($this->values[0], Collection::fromArray($this->values)->first());
         // 検算：フィルター
-        $this->assertSame($this->values[1], Collection::stream($this->values)->first(function ($value, $key) {
+        $this->assertSame($this->values[1], Collection::fromArray($this->values)->first(function ($value, $key) {
             return $value['age'] === 11 or $value['age'] === 13;
         }));
     }
@@ -601,9 +601,9 @@ class CollectionTest extends TestCase
     public function last_最後一件取得()
     {
         // 検算
-        $this->assertSame($this->values[count($this->values) - 1], Collection::stream($this->values)->last());
+        $this->assertSame($this->values[count($this->values) - 1], Collection::fromArray($this->values)->last());
         // 検算：フィルター
-        $this->assertSame($this->values[2], Collection::stream($this->values)->last(function ($value, $key) {
+        $this->assertSame($this->values[2], Collection::fromArray($this->values)->last(function ($value, $key) {
             return $value['age'] === 11 or $value['age'] === 13;
         }));
     }

@@ -108,11 +108,11 @@ class Collection
     /**
      * 値がnullではないものを返却する
      *
-     * @param string              $property キー名称
-     * @param string|int|callable $expr     値かcallableで遅延実行
+     * @param string                   $property キー名称
+     * @param string|int|callable|null $expr     値かcallableで遅延実行
      * @return $this
      */
-    public function where(string $property, string|int|callable $expr): self
+    public function where(string $property, string|int|callable|null $expr): self
     {
         $this->source = Filter::where($this->source, $property, $expr);
         return $this;

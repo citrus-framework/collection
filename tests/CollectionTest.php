@@ -434,6 +434,88 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
+    public function groupBy_callableでグルーピングして配列生成()
+    {
+        $values = [
+            1,
+            2,
+            3,
+            4,
+        ];
+
+        // 全部1を足す
+        $expected = [
+            'odd' => [
+                1,
+                3,
+            ],
+            'even' => [
+                2,
+                4,
+            ],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::fromArray($values)->groupBy(function ($vl) {
+            return $vl % 2 === 0 ? 'even' : 'odd';
+        })->toList());
+    }
+
+    /**
+     * @test
+     */
+    public function groupBy_配列添え字でグルーピングして配列生成()
+    {
+        $values = [
+            [
+                'name' => 'a',
+                'age' => 10,
+            ],
+            [
+                'name' => 'b',
+                'age' => 11,
+            ],
+            [
+                'name' => 'c',
+                'age' => 12,
+            ],
+            [
+                'name' => 'd',
+                'age' => 10,
+            ],
+        ];
+
+        // 全部1を足す
+        $expected = [
+            10 => [
+                [
+                    'name' => 'a',
+                    'age' => 10,
+                ],
+                [
+                    'name' => 'd',
+                    'age' => 10,
+                ],
+            ],
+            11 => [
+                [
+                    'name' => 'b',
+                    'age' => 11,
+                ],
+            ],
+            12 => [
+                [
+                    'name' => 'c',
+                    'age' => 12,
+                ],
+            ],
+        ];
+        // 検算
+        $this->assertSame($expected, Collection::fromArray($values)->groupBy('age')->toList());
+    }
+
+    /**
+     * @test
+     */
     public function range_指定範囲で配列生成()
     {
         $start = 5;
@@ -604,6 +686,19 @@ class CollectionTest extends TestCase
         $this->assertSame($this->values[count($this->values) - 1], Collection::fromArray($this->values)->last());
         // 検算：フィルター
         $this->assertSame($this->values[2], Collection::fromArray($this->values)->last(function ($value, $key) {
+            return $value['age'] === 11 or $value['age'] === 13;
+        }));
+    }
+
+    /**
+     * @test
+     */
+    public function at_指定一件取得()
+    {
+        // 検算
+        $this->assertSame($this->values[2], Collection::fromArray($this->values)->at(2));
+        // 検算：フィルター
+        $this->assertSame($this->values[2], Collection::fromArray($this->values)->at(1, function ($value) {
             return $value['age'] === 11 or $value['age'] === 13;
         }));
     }

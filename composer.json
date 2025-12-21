@@ -21,5 +21,10 @@
             "Citrus\\": "src/",
             "Test\\": "tests/"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

@@ -63,6 +63,18 @@ class Collection
         return Fetcher::last($this->source, $callable);
     }
 
+    /**
+     * 指定番号の要素を取得
+     *
+     * @param int           $index
+     * @param callable|null $callable
+     * @return mixed
+     */
+    public function at(int $index, callable|null $callable = null): mixed
+    {
+        return Fetcher::at($this->source, $index, $callable);
+    }
+
     /**************************************************************************
      * Filter
      **************************************************************************/
@@ -337,6 +349,18 @@ class Collection
     public function flatten(int|null $depth = 1, bool|null $preserve_keys = false): Collection
     {
         $this->source = Scanner::flatten($this->source, $depth, $preserve_keys);
+        return $this;
+    }
+
+    /**
+     * キーを指定してグルーピングを行う
+     *
+     * @param callable|string $callable
+     * @return $this
+     */
+    public function groupBy(callable|string $callable): self
+    {
+        $this->source = Scanner::groupBy($this->source, $callable);
         return $this;
     }
 

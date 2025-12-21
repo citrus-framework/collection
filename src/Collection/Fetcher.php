@@ -52,4 +52,24 @@ class Fetcher
         }
         return array_values($filtered)[$count - 1];
     }
+
+    /**
+     * 指定番号の要素を取得
+     *
+     * @param array         $source
+     * @param int           $index
+     * @param callable|null $callable function($value, $key)
+     * @return mixed
+     */
+    public static function at(array $source, int $index, callable|null $callable = null): mixed
+    {
+        $filtered = Filter::filter($source, $callable);
+        $count = Measurer::count($filtered);
+        // 無ければnull
+        if (0 === $count)
+        {
+            return null;
+        }
+        return array_values($filtered)[$index];
+    }
 }

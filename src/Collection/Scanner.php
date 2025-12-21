@@ -119,4 +119,47 @@ class Scanner
         }
         return $results;
     }
+
+    /**
+     * キーを指定してグルーピングを行う
+     *
+     * @param array    $source
+     * @param callable|string $callable function($value, $key) or index key
+     * @return array
+     */
+    public static function groupBy(array $source, callable|string $callable): array
+    {
+        $results = [];
+        foreach ($source as $ky => $vl)
+        {
+            $indexKey = null;
+            // 関数の場合は関数実行
+            if (is_callable($callable))
+            {
+                $indexKey = $callable($vl, $ky);
+            }
+            // 文字列の場合
+            else if (is_string($callable))
+            {
+                // 配列の場合は添え字から取得
+                if (is_array($vl))
+                {
+                    $indexKey = $vl[$callable];
+                }
+                // オブジェクトの場合はアロー指定
+                else if (is_object($vl))
+                {
+                    $indexKey = $vl->$callable;
+                }
+            }
+
+            if (array_key_exists($indexKey, $results) === false)
+            {
+                $results[$indexKey] = [];
+            }
+
+            $results[$indexKey][] = $vl;
+        }
+        return $results;
+    }
 }

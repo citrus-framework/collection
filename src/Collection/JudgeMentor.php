@@ -17,25 +17,23 @@ class JudgeMentor
 {
     /**
      * 要素が空である
-     *
      * @param array         $source
      * @param callable|null $callable function($value, $key)
      * @return bool
      */
     public static function isEmpty(array $source, callable|null $callable): bool
     {
-        return 0 === Measurer::count($source, $callable);
+        return Measurer::count($source, $callable) === 0;
     }
 
     /**
      * 要素が空ではない
-     *
      * @param array         $source
      * @param callable|null $callable function($value, $key)
      * @return bool
      */
     public static function isNotEmpty(array $source, callable|null $callable): bool
     {
-        return 0 !== Measurer::count($source, $callable);
+        return Measurer::count($source, $callable) !== 0;
     }
 }

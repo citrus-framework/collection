@@ -17,7 +17,6 @@ class Register
 {
     /**
      * callable関数がnull以外の値を返した場合、値を積んで返却する
-     *
      * @param array    $source
      * @param callable $callable function($value, $key)
      * @return iterable
@@ -28,7 +27,7 @@ class Register
         foreach ($source as $ky => $vl)
         {
             $append = $callable($vl, $ky);
-            if (false === is_null($append))
+            if ($append !== null)
             {
                 $results[$ky] = $append;
             }

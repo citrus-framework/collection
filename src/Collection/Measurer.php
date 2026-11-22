@@ -17,14 +17,13 @@ class Measurer
 {
     /**
      * 要素数
-     *
      * @param array         $source
      * @param callable|null $callable function($value, $key)
      * @return int
      */
     public static function count(array $source, callable|null $callable = null): int
     {
-        if (false === is_null($callable))
+        if ($callable !== null)
         {
             return count(Filter::filter($source, $callable));
         }

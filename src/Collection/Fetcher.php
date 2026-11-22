@@ -17,7 +17,6 @@ class Fetcher
 {
     /**
      * 先頭の要素を取得
-     *
      * @param array         $source
      * @param callable|null $callable function($value, $key)
      * @return mixed
@@ -27,7 +26,7 @@ class Fetcher
         $filtered = Filter::filter($source, $callable);
         $count = Measurer::count($filtered);
         // 無ければnull
-        if (0 === $count)
+        if ($count === 0)
         {
             return null;
         }
@@ -36,7 +35,6 @@ class Fetcher
 
     /**
      * 最後の要素を取得
-     *
      * @param array         $source
      * @param callable|null $callable function($value, $key)
      * @return mixed
@@ -46,7 +44,7 @@ class Fetcher
         $filtered = Filter::filter($source, $callable);
         $count = Measurer::count($filtered);
         // 無ければnull
-        if (0 === $count)
+        if ($count === 0)
         {
             return null;
         }
@@ -55,7 +53,6 @@ class Fetcher
 
     /**
      * 指定番号の要素を取得
-     *
      * @param array         $source
      * @param int           $index
      * @param callable|null $callable function($value, $key)
@@ -66,7 +63,7 @@ class Fetcher
         $filtered = Filter::filter($source, $callable);
         $count = Measurer::count($filtered);
         // 無ければnull
-        if (0 === $count)
+        if ($count === 0)
         {
             return null;
         }

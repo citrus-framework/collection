@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus;
 
+use Citrus\Collection\Comparator;
 use Citrus\Collection\Fetcher;
 use Citrus\Collection\Filter;
 use Citrus\Collection\Generator;
@@ -29,7 +30,6 @@ class Collection
 
     /**
      * constructor.
-     *
      * @param array $source
      */
     public function __construct(array $source)
@@ -37,13 +37,12 @@ class Collection
         $this->source = $source;
     }
 
-    /**************************************************************************
+    /*
      * Fetcher
-     **************************************************************************/
+     */
 
     /**
      * 先頭の要素を取得
-     *
      * @param callable|null $callable
      * @return mixed
      */
@@ -54,7 +53,6 @@ class Collection
 
     /**
      * 最後の要素を取得
-     *
      * @param callable|null $callable
      * @return mixed
      */
@@ -65,7 +63,6 @@ class Collection
 
     /**
      * 指定番号の要素を取得
-     *
      * @param int           $index
      * @param callable|null $callable
      * @return mixed
@@ -75,13 +72,12 @@ class Collection
         return Fetcher::at($this->source, $index, $callable);
     }
 
-    /**************************************************************************
+    /*
      * Filter
-     **************************************************************************/
+     */
 
     /**
      * callable関数の返却値がtrueの場合に積んで返却する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -93,7 +89,6 @@ class Collection
 
     /**
      * callable関数がの返却値がtrueの場合に削除して返却する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -101,25 +96,23 @@ class Collection
     {
         // false の場合に残せば良いので filter の逆
         return $this->filter(function ($vl, $ky) use ($callable) {
-            return (false === $callable($vl, $ky));
+            return ($callable($vl, $ky) === false);
         });
     }
 
     /**
      * 値がnullではないものを返却する
-     *
      * @return $this
      */
     public function notNull(): self
     {
         return $this->filter(function ($vl) {
-            return (false === is_null($vl));
+            return ($vl !== null);
         });
     }
 
     /**
      * 値がnullではないものを返却する
-     *
      * @param string                   $property キー名称
      * @param string|int|callable|null $expr     値かcallableで遅延実行
      * @return $this
@@ -130,13 +123,12 @@ class Collection
         return $this;
     }
 
-    /**************************************************************************
+    /*
      * Generator
-     **************************************************************************/
+     */
 
     /**
      * 配列設定して、コレクションを生成
-     *
      * @param array $source
      * @return $this
      * @deprecated 後方互換のため
@@ -148,7 +140,6 @@ class Collection
 
     /**
      * 配列設定して、コレクションを生成
-     *
      * @param array $source
      * @return Collection
      */
@@ -159,7 +150,6 @@ class Collection
 
     /**
      * イテレーター設定して、コレクションを生成
-     *
      * @param iterable $source
      * @return Collection
      */
@@ -170,7 +160,6 @@ class Collection
 
     /**
      * 指定した範囲でcallable関数を実行し、コレクションを生成
-     *
      * @param int      $start    開始
      * @param int      $end      終了
      * @param callable $callable
@@ -183,7 +172,6 @@ class Collection
 
     /**
      * 指定した回数でcallable関数を実行し、コレクションを生成
-     *
      * @param int      $count    回数
      * @param callable $callable
      * @return $this
@@ -198,7 +186,6 @@ class Collection
      * 両方の要素を残したいい感じの配列マージ
      *
      * 同じ要素がある場合はあとが優先
-     *
      * @param array $values
      * @return $this
      */
@@ -208,13 +195,12 @@ class Collection
         return $this;
     }
 
-    /**************************************************************************
+    /*
      * JudgeMentor
-     **************************************************************************/
+     */
 
     /**
      * 要素が空である
-     *
      * @param callable|null $callable function($value, $key)
      * @return bool
      */
@@ -225,7 +211,6 @@ class Collection
 
     /**
      * 要素が空ではない
-     *
      * @param callable|null $callable function($value, $key)
      * @return bool
      */
@@ -234,13 +219,12 @@ class Collection
         return JudgeMentor::isNotEmpty($this->source, $callable);
     }
 
-    /**************************************************************************
+    /*
      * Measurer
-     **************************************************************************/
+     */
 
     /**
      * 総素数
-     *
      * @param callable|null $callable function($value, $key)
      * @return int
      */
@@ -249,13 +233,12 @@ class Collection
         return Measurer::count($this->source, $callable);
     }
 
-    /**************************************************************************
+    /*
      * Register
-     **************************************************************************/
+     */
 
     /**
      * callable関数がnull以外の値を返した場合、値を積んで返却する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -265,13 +248,12 @@ class Collection
         return $this;
     }
 
-    /**************************************************************************
+    /*
      * Scanner
-     **************************************************************************/
+     */
 
     /**
      * callable関数を適用した内容を積んで返却する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -283,7 +265,6 @@ class Collection
 
     /**
      * 指定メソッドを実行した適用した内容を積んで返却する
-     *
      * @param string $method_name
      * @return $this
      */
@@ -291,7 +272,7 @@ class Collection
     {
         $this->source = Scanner::map($this->source, function ($vl) use ($method_name) {
             // メソッドが存在する場合に実行する
-            if (true === method_exists($vl, $method_name))
+            if (method_exists($vl, $method_name) === true)
             {
                 $vl->$method_name();
             }
@@ -303,7 +284,6 @@ class Collection
     /**
      * callable関数を適用した内容を積んで返却する
      * keyを指定する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -316,7 +296,6 @@ class Collection
     /**
      * callable関数を適用した内容を積んで返却する
      * keyを維持する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -328,7 +307,6 @@ class Collection
 
     /**
      * コレクションにchunkを適用する
-     *
      * @param int  $chunk         いくつずつに分割するか
      * @param bool $preserve_keys true:キーを維持する
      * @return $this
@@ -341,7 +319,6 @@ class Collection
 
     /**
      * 多次元コレクションを一次元にする
-     *
      * @param int|null  $depth         再起回数の指定
      * @param bool|null $preserve_keys true:キーを維持する、キーが重複する場合は後勝ちする
      * @return $this
@@ -354,7 +331,6 @@ class Collection
 
     /**
      * キーを指定してグルーピングを行う
-     *
      * @param callable|string $callable
      * @return $this
      */
@@ -364,15 +340,14 @@ class Collection
         return $this;
     }
 
-    /**************************************************************************
+    /*
      * Sorter
-     **************************************************************************/
+     */
 
     /**
      * callable関数を利用してソートする
      *
      * callable関数は -1 or 0 or 1 を返却する
-     *
      * @param callable $callable
      * @return $this
      */
@@ -384,7 +359,6 @@ class Collection
 
     /**
      * プロパティを指定してソートする
-     *
      * @param string $property
      * @param bool   $ascending true:昇順,false:降順
      * @return $this
@@ -392,51 +366,30 @@ class Collection
     public function sortByProp(string $property, bool $ascending = true): self
     {
         $this->source = Sorter::sortBy($this->source, function ($data1, $data2) use ($property, $ascending) {
-            // 配列かオブジェクトで取得方法を変える
-            $value1 = (true === is_array($data1) ? $data1[$property] : $data1->$property);
-            $value2 = (true === is_array($data2) ? $data2[$property] : $data2->$property);
-            // 降順の場合は-1を掛ける
-            return ($value1 <=> $value2) * (true === $ascending ? 1 : -1);
+            return Comparator::byProperty($data1, $data2, $property, $ascending);
         });
         return $this;
     }
 
     /**
      * プロパティを複数指定してソートする
-     *
      * @param array $properties [[property => ascending], [property => ascending], ...]
      * @return $this
      */
     public function sortByProps(array $properties): self
     {
         $this->source = Sorter::sortBy($this->source, function ($data1, $data2) use ($properties) {
-            // 配列かオブジェクトで取得方法を変える
-            foreach ($properties as $property => $ascending)
-            {
-                $value1 = (true === is_array($data1) ? $data1[$property] : $data1->$property);
-                $value2 = (true === is_array($data2) ? $data2[$property] : $data2->$property);
-                // 比較
-                $compare = ($value1 <=> $value2);
-                // 比較して 0の場合はもう一周する
-                if (0 === $compare)
-                {
-                    continue;
-                }
-                // 降順の場合は-1を掛ける
-                return $compare * (true === $ascending ? 1 : -1);
-            }
-            return 0;
+            return Comparator::byProperties($data1, $data2, $properties);
         });
         return $this;
     }
 
-    /**************************************************************************
+    /*
      * Exporter
-     **************************************************************************/
+     */
 
     /**
      * 出力
-     *
      * @return array
      */
     public function toList(): array
@@ -446,7 +399,6 @@ class Collection
 
     /**
      * 出力(値だけ)
-     *
      * @return array
      */
     public function toValues(): array
@@ -456,7 +408,6 @@ class Collection
 
     /**
      * 出力(キーだけ)
-     *
      * @return array
      */
     public function toKeys(): array

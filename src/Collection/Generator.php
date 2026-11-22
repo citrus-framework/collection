@@ -19,7 +19,6 @@ class Generator
 {
     /**
      * イテレーター設定して、コレクションを生成
-     *
      * @param iterable $source
      * @return Collection
      * @deprecated 後方互換のため
@@ -31,7 +30,6 @@ class Generator
 
     /**
      * 配列設定して、コレクションを生成
-     *
      * @param array $source
      * @return Collection
      */
@@ -42,7 +40,6 @@ class Generator
 
     /**
      * イテレーター設定して、コレクションを生成
-     *
      * @param iterable $source
      * @return Collection
      */
@@ -53,7 +50,6 @@ class Generator
 
     /**
      * 指定した範囲でcallable関数を実行し、コレクションを生成
-     *
      * @param int      $start    開始
      * @param int      $end      終了
      * @param callable $callable
@@ -72,7 +68,6 @@ class Generator
     /**
      * 両方の要素を残したいい感じの配列マージ
      * 同じ要素がある場合はあとが優先
-     *
      * @param array $array1
      * @param array $array2
      * @return array
@@ -82,7 +77,7 @@ class Generator
         foreach ($array2 as $ky => $vl)
         {
             $array1[$ky] = (
-                true === is_array($vl)
+                is_array($vl) === true
                 ? self::betterMergeRecursive(($array1[$ky] ?? []), $array2[$ky]) // 配列の場合
                 : $array2[$ky]                                                   // 配列以外の場合
             );

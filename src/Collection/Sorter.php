@@ -19,7 +19,6 @@ class Sorter
      * callable関数を利用してソートする
      *
      * callable関数は -1 or 0 or 1 を返却する
-     *
      * @param array    $source
      * @param callable $callable function($value1, $value2)
      * @return array
